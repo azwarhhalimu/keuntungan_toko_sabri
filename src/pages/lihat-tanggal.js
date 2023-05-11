@@ -1,14 +1,16 @@
 import AppBar from "@/Widget/AppBar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import No_data from "@/Widget/No_data";
 import { NumericFormat } from "react-number-format";
 import { xeta_api } from "@/Utils/ENV_VARIABEL";
 import Link from "next/link";
+import Height from "@/Widget/Height";
+import Loading from "@/Widget/Loading";
 const Lihat_tanggal = () => {
     const [loading, setLoading] = useState(false);
     const [tanggal, setTanggal] = useState();
     const [data, setData] = useState([]);
-
+    const [total, setTotal] = useState(0);
     const _showTanggal = async (value) => {
         setLoading(true)
         const options = {
@@ -28,7 +30,16 @@ const Lihat_tanggal = () => {
             .catch(err => console.error(err));
 
     }
+
+    useEffect(() => {
+        let a = 0;
+        data.map((list, index) => (
+            a = a + list["jumlah"]
+        ));
+        setTotal(a);
+    }, [data])
     return (<>
+        {loading && <Loading text={"Mengambil data..."} />}
         <AppBar leading={true} title="Berdasarkan Tanggal" />
         <div className="container">
             <div className="row">
@@ -66,6 +77,21 @@ const Lihat_tanggal = () => {
                     {(data.length == 0 && !loading) && <No_data />}
                 </div>
             </div>
+        </div>
+
+        <Height height={100} />
+        <div style={{
+            borderTop: "1px solid #DFDFDF",
+            width: "100%",
+            background: "#FFF",
+            position: "fixed",
+            zIndex: "100",
+            width: "100%",
+            bottom: 0,
+            left: 0,
+            padding: "15px"
+        }}>
+            Total : <NumericFormat displayType="text" thousandSeparator={","} value={total} prefix="Rp. " />  | Jumlah Transaksi :  {data.length}
         </div>
     </>);
 }

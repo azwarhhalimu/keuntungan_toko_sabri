@@ -58,10 +58,6 @@ export default function Home() {
 
       })
       .catch(err => console.error(err));
-
-
-
-
   }
   const _ab = () => {
     let a = 0;
@@ -118,7 +114,7 @@ export default function Home() {
           onClick={() => {
             route.push("/tambah-data");
           }}
-          className='btn btn-block btn-primary'><i className='glyphicon glyphicon-plus' /> Tambah Catatan</button>
+          className='btn btn-block btn-primary'><i className='glyphicon glyphicon-plus' /> Tambah Catatan ({data.length})</button>
       </div>
 
     </>
