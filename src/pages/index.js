@@ -32,7 +32,7 @@ export default function Home() {
         <div className='row'>
           <div className='col-lg-12'>
             {data.map((list, index) => (
-              <div class="panel panel-default">
+              <div key={index + "df"} class="panel panel-default">
                 <div class="panel-heading">{list["nama"]}</div>
                 <div class="panel-body">
                   {list["keterangan"]}<br />
@@ -45,6 +45,7 @@ export default function Home() {
           </div>
         </div>
       </div>
+
 
 
     </>
