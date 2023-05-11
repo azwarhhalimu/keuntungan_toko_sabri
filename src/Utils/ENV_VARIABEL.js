@@ -1,0 +1,1 @@
+export const xeta_api = "xau_Cc5USE3uxN5m7f2cvqIDXOBCCCmOwRZD0";
