@@ -2,13 +2,14 @@ import { xeta_api } from "@/Utils/ENV_VARIABEL";
 import AppBar from "@/Widget/AppBar";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-
+import { NumericFormat } from "react-number-format";
 const Edit_data = () => {
     const route = useRouter();
     const [tanggal, setTanggal] = useState("");
     const [keuntungan, setKeuntungan] = useState("");
     const [keterangan, setKeterangan] = useState("");
     const [nama, setNama] = useState("nama");
+    const [ontype, setOnType] = useState(false);
 
     const _simpan = (e) => {
         e.preventDefault();
@@ -72,13 +73,18 @@ const Edit_data = () => {
                             <label htmlFor="exampleInputEmail1">
                                 Estimasi Keuntungan
                             </label>
-                            <input
-                                value={keuntungan}
+                            <NumericFormat
                                 onChange={(e) => {
-                                    setKeuntungan(e.target.value);
+                                    setOnType(true);
+                                    setKeuntungan(e.target.value.replaceAll(",", "").replace("Rp. ", ""));
+
 
                                 }}
-                                required type="text" className="form-control" id="exampleInputEmail1" placeholder="Estimasi Keuntungan" />
+                                {...!ontype && {
+                                    value: keuntungan
+                                }}
+
+                                required prefix="Rp. " thousandSeparator={","} className="form-control" id="exampleInputEmail1" placeholder="Estimasi Keuntungan" />
                         </div>
                         <div className="form-group">
                             <label htmlFor="exampleInputEmail1">

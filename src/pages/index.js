@@ -86,28 +86,29 @@ export default function Home() {
       <div className='container'>
         <div className='row'>
           <div className='col-lg-12'>
-            {data.map((list, index) => (
-              <div key={index + "df"} class="panel panel-default">
-                <div class="panel-heading">{list["nama"]}
-                  <span className='pull-right'>
-                    <Link href={"/" + list["id"] + "/edit-data"}>[Edit]</Link>
-                    {" "}&nbsp;
-                    {" "}&nbsp;
-                    <button onClick={() => {
-                      _delete(list["id"]);
-                    }}>[Hapus]</button>
-                  </span>
+            {data.slice(0)
+              .reverse().map((list, index) => (
+                <div key={index + "df"} class="panel panel-default">
+                  <div class="panel-heading">{list["nama"]}
+                    <span className='pull-right'>
+                      <Link href={"/" + list["id"] + "/edit-data"}>[Edit]</Link>
+                      {" "}&nbsp;
+                      {" "}&nbsp;
+                      <button onClick={() => {
+                        _delete(list["id"]);
+                      }}>[Hapus]</button>
+                    </span>
 
+                  </div>
+                  <div class="panel-body">
+                    {list["keterangan"]}<br />
+                    <NumericFormat displayType='text' value={list["jumlah"]} allowLeadingZeros thousandSeparator="," prefix='Rp. ' /><br />
+
+                    {list["tanggal"]}<br />
+                  </div>
                 </div>
-                <div class="panel-body">
-                  {list["keterangan"]}<br />
-                  <NumericFormat displayType='text' value={list["jumlah"]} allowLeadingZeros thousandSeparator="," prefix='Rp. ' /><br />
 
-                  {list["tanggal"]}<br />
-                </div>
-              </div>
-
-            ))}
+              ))}
             {(data.length == 0 && !loading) && <No_data />}
           </div>
         </div>

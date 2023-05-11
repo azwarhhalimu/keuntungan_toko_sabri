@@ -2,6 +2,7 @@ import { xeta_api } from "@/Utils/ENV_VARIABEL";
 import AppBar from "@/Widget/AppBar";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import { NumericFormat } from "react-number-format";
 
 const Tambah_data = () => {
     const route = useRouter();
@@ -44,13 +45,14 @@ const Tambah_data = () => {
                         <div className="form-group">
                             <label htmlFor="exampleInputEmail1">
                                 Estimasi Keuntungan
+
                             </label>
-                            <input
+                            <NumericFormat
                                 onChange={(e) => {
-                                    setKeuntungan(e.target.value);
+                                    setKeuntungan(e.target.value.replaceAll(",", "").replace("Rp. ", ""));
 
                                 }}
-                                required type="text" className="form-control" id="exampleInputEmail1" placeholder="Estimasi Keuntungan" />
+                                required prefix="Rp. " thousandSeparator={","} className="form-control" id="exampleInputEmail1" placeholder="Estimasi Keuntungan" />
                         </div>
                         <div className="form-group">
                             <label htmlFor="exampleInputEmail1">
