@@ -2,14 +2,15 @@
 import { xeta_api } from '@/Utils/ENV_VARIABEL';
 import AppBar from '@/Widget/AppBar';
 import { Inter } from 'next/font/google'
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
 export default function Home() {
   const [data, setData] = useState([]);
   const route = useRouter();
+  const [loading, setLoading] = useState(false);
   const _getData = async () => {
-
     const options = {
       method: 'POST',
       headers: { Authorization: 'Bearer ' + xeta_api, 'Content-Type': 'application/json' },
@@ -35,7 +36,15 @@ export default function Home() {
           <div className='col-lg-12'>
             {data.map((list, index) => (
               <div key={index + "df"} class="panel panel-default">
-                <div class="panel-heading">{list["nama"]}</div>
+                <div class="panel-heading">{list["nama"]}
+                  <span className='pull-right'>
+                    <Link href={"/" + list["id"] + "/edit-data"}>[Edit]</Link>
+                    {" "}&nbsp;
+                    {" "}&nbsp;
+                    <Link href={"/" + list["id"] + "/edi-data"}>[Hapus]</Link>
+                  </span>
+
+                </div>
                 <div class="panel-body">
                   {list["keterangan"]}<br />
                   {list["jumlah"]}<br />

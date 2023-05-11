@@ -1,31 +1,56 @@
 import { xeta_api } from "@/Utils/ENV_VARIABEL";
 import AppBar from "@/Widget/AppBar";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-const Tambah_data = () => {
+const Edit_data = () => {
     const route = useRouter();
     const [tanggal, setTanggal] = useState("");
     const [keuntungan, setKeuntungan] = useState("");
     const [keterangan, setKeterangan] = useState("");
     const [nama, setNama] = useState("nama");
+
     const _simpan = (e) => {
         e.preventDefault();
         const options = {
-            method: 'POST',
+            method: 'PATCH',
             headers: { Authorization: 'Bearer ' + xeta_api, 'Content-Type': 'application/json' },
             body: '{"tanggal":"' + tanggal + '","jumlah":' + keuntungan + ',"keterangan":"' + keterangan + '","nama":"' + nama + '"}'
         };
 
-        fetch('https://azwar-halimu-s-workspace-k5qu0k.us-east-1.xata.sh/db/catatan_keuntngan:main/tables/keuntungan/data?columns=id', options)
+        fetch("https://azwar-halimu-s-workspace-k5qu0k.us-east-1.xata.sh/db/catatan_keuntngan:main/tables/keuntungan/data/" + getId, options)
             .then(response => response.json())
             .then(response => {
                 route.back();
             })
             .catch(err => console.error(err));
     }
+    const getId = typeof window !== "undefined" && window.location.pathname.split("/")[1];
+
+    function _getData() {
+
+        const options = {
+            method: 'POST',
+            headers: { Authorization: 'Bearer ' + xeta_api, 'Content-Type': 'application/json' },
+            body: '{"filter": { "id": "' + getId + '"}}'
+        };
+
+        fetch('https://azwar-halimu-s-workspace-k5qu0k.us-east-1.xata.sh/db/catatan_keuntngan:main/tables/keuntungan/query?id=rec_che3dfhe0mklna6me44g', options)
+            .then(response => response.json())
+            .then(response => {
+                setTanggal(response.records[0].tanggal);
+                setNama(response.records[0].nama);
+                setKeterangan(response.records[0].keterangan);
+                setKeuntungan(response.records[0].jumlah);
+            })
+            .catch(err => console.error(err));
+    }
+
+    useEffect(() => {
+        _getData();
+    }, [])
     return (<>
-        <AppBar title="Tambah Data" leading={true} />
+        <AppBar title="Edit Data" leading={true} />
         <div className="container">
             <div className="row">
                 <div className="col-lg-12">
@@ -35,10 +60,12 @@ const Tambah_data = () => {
                                 Tanggal
                             </label>
                             <input
+                                value={tanggal}
                                 onChange={(e) => {
                                     setTanggal(e.target.value);
 
                                 }}
+
                                 required type="date" className="form-control" id="exampleInputEmail1" placeholder="Tanggal hari ini" />
                         </div>
                         <div className="form-group">
@@ -46,6 +73,7 @@ const Tambah_data = () => {
                                 Estimasi Keuntungan
                             </label>
                             <input
+                                value={keuntungan}
                                 onChange={(e) => {
                                     setKeuntungan(e.target.value);
 
@@ -57,6 +85,7 @@ const Tambah_data = () => {
                                 Keterangan
                             </label>
                             <textarea
+                                value={keterangan}
                                 onChange={(e) => {
                                     setKeterangan(e.target.value);
 
@@ -68,6 +97,7 @@ const Tambah_data = () => {
                                 Nama Pembeli
                             </label>
                             <input
+                                value={nama}
                                 onChange={(e) => {
                                     setNama(e.target.value);
 
@@ -86,4 +116,4 @@ const Tambah_data = () => {
     </>);
 }
 
-export default Tambah_data;
+export default Edit_data;
