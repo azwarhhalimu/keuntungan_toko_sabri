@@ -2,10 +2,12 @@
 import { xeta_api } from '@/Utils/ENV_VARIABEL';
 import AppBar from '@/Widget/AppBar';
 import { Inter } from 'next/font/google'
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
 export default function Home() {
   const [data, setData] = useState([]);
+  const route = useRouter();
   const _getData = async () => {
 
     const options = {
@@ -27,7 +29,7 @@ export default function Home() {
   }, [])
   return (
     <>
-      <AppBar title={"Beranda"} />
+      <AppBar title={"Catatan Keuntungan"} />
       <div className='container'>
         <div className='row'>
           <div className='col-lg-12'>
@@ -45,8 +47,13 @@ export default function Home() {
           </div>
         </div>
       </div>
-
-
+      <div style={{ position: "fixed", width: "100%", padding: "5px", zIndex: "100", bottom: "0px" }}>
+        <button
+          onClick={() => {
+            route.push("/tambah-data");
+          }}
+          className='btn btn-block btn-primary'><i className='glyphicon glyphicon-plus' /> Tambah Catatan</button>
+      </div>
 
     </>
   )

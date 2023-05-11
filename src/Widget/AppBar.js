@@ -1,6 +1,7 @@
+import Link from "next/link";
 import Height from "./Height";
 
-const AppBar = ({ title }) => {
+const AppBar = ({ title, leading = false }) => {
     return (
         <>
             <div style={{
@@ -15,6 +16,14 @@ const AppBar = ({ title }) => {
                 <table>
                     <tbody>
                         <tr>
+                            {leading &&
+                                <>
+                                    <td>
+                                        <Link href="/"><i className="glyphicon glyphicon-chevron-left" />Back</Link>
+                                    </td>
+                                    <td width={"20px"}></td>
+                                </>
+                            }
                             <td>
                                 <div style={{ fontWeight: "bold" }}>{title}</div>
                             </td>
