@@ -7,10 +7,12 @@ import { Inter } from 'next/font/google'
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import { NumericFormat } from 'react-number-format';
 
 export default function Home() {
   const [data, setData] = useState([]);
   const route = useRouter();
+  const [total, setTotal] = useState();
   const [loading, setLoading] = useState(false);
   const [reload, setReload] = useState(0);
   const _delete = (id) => {
@@ -32,29 +34,55 @@ export default function Home() {
   }
 
   const _getData = async () => {
+
+    let today = new Date();
+
+    let year = today.getFullYear();
+    let month = String(today.getMonth() + 1).padStart(2, '0');
+    let day = String(today.getDate()).padStart(2, '0');
+
+    let formattedDate = `${year}-${month}-${day}`;
     setLoading(true)
     const options = {
       method: 'POST',
       headers: { Authorization: 'Bearer ' + xeta_api, 'Content-Type': 'application/json' },
-      body: '{"page":{"size":15}}'
+      body: '{ "filter": { "tanggal": { "$contains": "' + formattedDate + '" } } }'
+
     };
 
-    fetch('https://azwar-halimu-s-workspace-k5qu0k.us-east-1.xata.sh/db/catatan_keuntngan:main/tables/keuntungan/query', options)
+    await fetch('https://azwar-halimu-s-workspace-k5qu0k.us-east-1.xata.sh/db/catatan_keuntngan:main/tables/keuntungan/query', options)
       .then(response => response.json())
       .then(response => {
         setLoading(false);
         setData(response.records);
+
       })
       .catch(err => console.error(err));
+
+
+
+
   }
+  const _ab = () => {
+    let a = 0;
+    data.map((list, index) => (
+      a = a + list["jumlah"]
+    ));
+    setTotal(a);
+  }
+  useEffect(() => {
+    _ab();
+  }, [data]);
   useEffect(() => {
 
     _getData();
+
+
   }, [reload])
   return (
     <>
       {loading && <Loading text="Loading..." />}
-      <AppBar title={"Catatan Keuntungan"} />
+      <AppBar total={total} title={"Catatan Keuntungan"} />
       <div className='container'>
         <div className='row'>
           <div className='col-lg-12'>
@@ -73,7 +101,8 @@ export default function Home() {
                 </div>
                 <div class="panel-body">
                   {list["keterangan"]}<br />
-                  {list["jumlah"]}<br />
+                  <NumericFormat displayType='text' value={list["jumlah"]} allowLeadingZeros thousandSeparator="," prefix='Rp. ' /><br />
+
                   {list["tanggal"]}<br />
                 </div>
               </div>
